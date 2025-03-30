@@ -1,0 +1,29 @@
+{
+  "name": "pythia",
+  "version": "0.1.0",
+  "author": "Sebastian Wirkijowski",
+  "description": "",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/xwirkijowski/pythia",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.cjs",
+    "./esm": "./dist/index.esm.js"
+  },
+  "scripts": {
+    "ts": "tsc",
+    "rollup": "rollup -c",
+    "build": "npm run ts && npm run rollup",
+    "build-test": "npm run build && npm run test",
+    "test": "node test/index.mjs"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@types/node": "^22.9.0",
+    "rollup": "^4.26.0",
+    "typescript": "^5.6.3"
+  }
+}

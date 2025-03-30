@@ -1,0 +1,14 @@
+logs
+*.log
+
+node_modules/
+
+.npm
+
+.env
+.env*
+
+.idea
+
+src/
+test/
