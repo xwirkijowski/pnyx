@@ -1,10 +1,10 @@
 {
-  "name": "pythia",
+  "name": "pnyx",
   "version": "0.1.0",
   "author": "Sebastian Wirkijowski",
   "description": "",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/xwirkijowski/pythia",
+  "homepage": "https://github.com/xwirkijowski/pnyx",
   "main": "./dist/index.cjs",
   "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",

@@ -1,5 +1,5 @@
 /**
- * Pythia - Type-Safe Configuration Loader
+ * Pnyx - Type-Safe Configuration Loader
  * @author  Sebastian Wirkijowski <sebastian@wirkijowski.me>
  */
 
@@ -67,9 +67,9 @@ type Constants<C extends Constant> = {
 };
 
 // Merges dynamic configuration with optional static constants into the final configuration object type
-export type PythiaConfig<T extends ConfigSchema, C extends Constant> = Config<T> & Constants<C>;
+export type PnyxConfig<T extends ConfigSchema, C extends Constant> = Config<T> & Constants<C>;
 
-export interface PythiaOptions<C extends Constant = {}> {
+export interface PnyxOptions<C extends Constant = {}> {
 	/**
 	 * **Optional** object containing static constant values to be merged into the configuration.
 	 * Recommend defining with 'as const' for type safety and readonly properties.
@@ -217,19 +217,19 @@ function loadSchema<T extends ConfigSchema> (
 /**
  *
  * @param   schema  {ConfigSchema}
- * @param   options {PythiaOptions<Constant>}
+ * @param   options {PnyxOptions<Constant>}
  */
-export function Pythia<
+export function Pnyx<
 	T extends ConfigSchema,
 	C extends Constant = {}
 >(
 	schema: T,
-	options?: PythiaOptions<C>,
-): PythiaConfig<T, C> {
+	options?: PnyxOptions<C>,
+): PnyxConfig<T, C> {
 	const constants = options?.constants ?? ({} as C);
 	
 	const onError = options?.onError ?? function (errors: Error[]) {
-		console.group('Pythia encountered an error!')
+		console.group('Pnyx encountered an error!')
 		errors.forEach(err => console.error(err));
 		console.error('Cannot start due to invalid configuration.');
 		console.groupEnd();
@@ -237,7 +237,7 @@ export function Pythia<
 	};
 	
 	const onWarn = options?.onWarn ?? function (message) {
-		console.warn(`[Pythia Config Warning]`, message);
+		console.warn(`[Pnyx Config Warning]`, message);
 	}
 	
 	// Check for potential top-level key collisions between constants and schema groups
@@ -251,17 +251,17 @@ export function Pythia<
 	
 	if (errors.length > 0) {
 		onError(errors);
-		throw new Error('Pythia configuration loading failed, and onError handler did not terminate execution!');
+		throw new Error('Pnyx configuration loading failed, and onError handler did not terminate execution!');
 	}
 	
 	if (warnings.length > 0) {
 		warnings.forEach(warning => onWarn(warning));
 	}
 	
-	const pythiaConfig = {
+	const pnyxConfig = {
 		...config,
 		...constants,
 	}
 	
-	return Object.freeze(pythiaConfig) as PythiaConfig<T, C>;
+	return Object.freeze(pnyxConfig) as PnyxConfig<T, C>;
 }

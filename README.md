@@ -1,4 +1,4 @@
-# 🛠️ Pythia - Type-Safe Configuration Loader
+# 🛠️ Pnyx - Type-Safe Configuration Loader
 
 A lightweight, zero-dependency configuration loader for Node.js applications, written in TypeScript.
 
@@ -7,6 +7,8 @@ Load your configuration from environment variables based on a predefined schema,
 Built with modern JavaScript and packaged in both CommonJS and ES Modules formats for seamless integration.
 
 > **Fun fact:** Made in under 3 hours, based on the premise of my existing configuration loader snippet from [NiceBadge](https://github.com/xwirkijowski/nicebadge).
+
+Why **Pnyx**? Just as the ancient Athenians gathered on the Pnyx hill to debate, establish laws, and bring order to their city, this library serves as the assembly point for your application's configuration. Define your essential settings and rules – the "laws" – within a clear schema, and `pnyx` ensures they are correctly gathered, validated, and assembled into the stable, foundational configuration your application needs to operate decisively.
 
 ## Features
 - 🪶 **Super Tiny** — Runtime size of ~4.7KB, 17.5KB total artifact size.
@@ -21,7 +23,7 @@ Built with modern JavaScript and packaged in both CommonJS and ES Modules format
 ## How to use?
 ### 1. Install
 ```bash
-npm install ????
+npm install pnyx
 ```
 ### 2. Define your schema and constants
 
@@ -29,7 +31,7 @@ npm install ????
 
 ```ts
 // config.ts
-import {Pythia, ConfigSchema, PythiaConfig} from "????";
+import {Pnyx, ConfigSchema, PythiaConfig} from "????";
 
 // Your configuration, loaded and built from environment variables
 const schema = {
@@ -50,13 +52,13 @@ const constants = {
 	apiVersion: 1,
 } as const;
 
-export const config: PythiaConfig<typeof schema, typeof constants> = Pythia(schema, {constants});
+export const config: PnyxConfig<typeof schema, typeof constants> = Pnyx(schema, {constants});
 ```
 
 #### Without TypeScript (CommonJS)
 ```js
 // config.ts
-const {Pythia} = require("????")
+const {Pnyx} = require("pnyx")
 
 // Your configuration, loaded and built from environment variables
 const schema = {
@@ -77,7 +79,7 @@ const constants = {
     apiVersion: 1,
 };
 
-module.exports = Pythia(schema, {constans});
+module.exports = Pnyx(schema, {constans});
 ```
 
 ### 3. Use in your code
