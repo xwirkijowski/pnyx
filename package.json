@@ -1,10 +1,21 @@
 {
   "name": "pnyx",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Sebastian Wirkijowski",
-  "description": "",
+  "description": "A lightweight, zero-dependency configuration loader for Node.js applications, written in TypeScript.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/xwirkijowski/pnyx",
+  "keywords": [
+    "nodejs",
+    "commonjs",
+    "config",
+    "library",
+    "typescript",
+    "environment-variables",
+    "zero-dependency",
+    "config-loader",
+    "loader"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
