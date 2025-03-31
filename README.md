@@ -31,7 +31,7 @@ npm install pnyx
 
 ```ts
 // config.ts
-import {Pnyx, ConfigSchema, PythiaConfig} from "????";
+import {Pnyx, ConfigSchema, PnyxConfig} from "pnyx";
 
 // Your configuration, loaded and built from environment variables
 const schema = {
