@@ -188,25 +188,24 @@ function loadSchema<T extends ConfigSchema> (
 				if (defaultValue !== undefined) {
 					if (typeof defaultValue !== effectiveType) {
 						isDefaultValueValid = false;
-						errors.push(new Error(`Schema Error: (${groupName}.${propName}): Default value type "${typeof defaultValue}" does not match expected effective type "${effectiveType}".`))
+						errors.push(new Error(`Schema Error: (${groupName}.${propName}) - default value type "${typeof defaultValue}" does not match expected effective type "${effectiveType}"`))
 					}
+				} else {
+					isDefaultValueValid = false;
 				}
 				
 				if (required === true) {
-					if (defaultValue !== undefined && isDefaultValueValid) {
+					if (isDefaultValueValid) {
 						finalValue = defaultValue;
-						warnings.push(`Required environment variable "${varName} (for ${groupName}.${propName}) was not set. Using provided default value.`)
+						onWarn(`Missing required "${varName} environment variable (for ${groupName}.${propName}) - using default value`)
 					} else {
-						errors.push(new Error(`Missing required environment variable: "${varName}" (for ${groupName}.${propName}).${!isDefaultValueValid ? ' Provided default value type is invalid.' : ''}`))
+						errors.push(new Error(`Missing required "${varName}" environment variable (for ${groupName}.${propName})`))
 					}
-				} else if (defaultValue !== undefined && isDefaultValueValid) {
-					onWarn(`Required environment variable "${varName} (for ${groupName}.${propName}) was not set. Using provided default value.`)
+				} else if (isDefaultValueValid) {
+					onLog(`Missing "${varName}" environment variable (for ${groupName}.${propName}) - using default value`)
 					finalValue = defaultValue;
-				} else if (defaultValue !== undefined && !isDefaultValueValid) {
-					onLog(`Environment variable "${varName}" (for ${groupName}.${propName}) was not set.`)
-					finalValue = undefined;
-				} else {
-					onLog(`Environment variable "${varName}" (for ${groupName}.${propName}) was not set.`)
+				} else if (!isDefaultValueValid) {
+					onLog(`Missing "${varName}" environment variable (for ${groupName}.${propName})`)
 					finalValue = undefined;
 				}
 			}
