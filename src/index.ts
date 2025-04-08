@@ -78,6 +78,13 @@ export interface PnyxOptions<C extends Constant = {}> {
 	 */
 	constants?: C;
 	/**
+	 * **Optional** callback function to log any missing non-required variables.
+	 * By default, it only logs the message with `console.log()`.
+	 * @optional
+	 * @param   message {string} The log message.
+	 */
+	onLog?: (message: string) => void;
+	/**
 	 * **Optional** callback function to handle warnings during configuration loading, e.g. using default as fallback value.
 	 * By default, it only logs the message with `console.warn()`.
 	 *
@@ -135,9 +142,13 @@ function parseValue (
  *
  * @internal
  * @param   schema  {ConfigSchema}  The configuration schema.
+ * @param   onWarn  {function}      Warning callback.
+ * @param   onLog   {function}      Logging callback.
  */
 function loadSchema<T extends ConfigSchema> (
-	schema: T
+	schema: T,
+	onWarn: (message: string) => void,
+	onLog: (message: string) => void,
 ) {
 	// Declare config object and error aggregator
 	const config: {[K in keyof T]?: MappedGroup<T[K]>} = {};
@@ -189,10 +200,13 @@ function loadSchema<T extends ConfigSchema> (
 						errors.push(new Error(`Missing required environment variable: "${varName}" (for ${groupName}.${propName}).${!isDefaultValueValid ? ' Provided default value type is invalid.' : ''}`))
 					}
 				} else if (defaultValue !== undefined && isDefaultValueValid) {
+					onWarn(`Required environment variable "${varName} (for ${groupName}.${propName}) was not set. Using provided default value.`)
 					finalValue = defaultValue;
 				} else if (defaultValue !== undefined && !isDefaultValueValid) {
+					onLog(`Environment variable "${varName}" (for ${groupName}.${propName}) was not set.`)
 					finalValue = undefined;
 				} else {
+					onLog(`Environment variable "${varName}" (for ${groupName}.${propName}) was not set.`)
 					finalValue = undefined;
 				}
 			}
@@ -228,7 +242,7 @@ export function Pnyx<
 ): PnyxConfig<T, C> {
 	const constants = options?.constants ?? ({} as C);
 	
-	const onError = options?.onError ?? function (errors: Error[]) {
+	const onError = options?.onError ?? function (errors: Error[]): void {
 		console.group('Pnyx encountered an error!')
 		errors.forEach(err => console.error(err));
 		console.error('Cannot start due to invalid configuration.');
@@ -236,8 +250,12 @@ export function Pnyx<
 		process.exit(1);
 	};
 	
-	const onWarn = options?.onWarn ?? function (message) {
+	const onWarn = options?.onWarn ?? function (message: string): void {
 		console.warn(`[Pnyx Config Warning]`, message);
+	}
+	
+	const onLog = options?.onLog ?? function (message: string): void {
+		console.log(`[Pnyx Config]`, message);
 	}
 	
 	// Check for potential top-level key collisions between constants and schema groups
@@ -247,15 +265,11 @@ export function Pnyx<
 		}
 	}
 	
-	const {config, errors, warnings} = loadSchema(schema);
+	const {config, errors} = loadSchema(schema, onWarn, onLog);
 	
 	if (errors.length > 0) {
 		onError(errors);
 		throw new Error('Pnyx configuration loading failed, and onError handler did not terminate execution!');
-	}
-	
-	if (warnings.length > 0) {
-		warnings.forEach(warning => onWarn(warning));
 	}
 	
 	const pnyxConfig = {
