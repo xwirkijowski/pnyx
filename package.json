@@ -1,6 +1,6 @@
 {
   "name": "pnyx",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Sebastian Wirkijowski",
   "description": "A lightweight, zero-dependency configuration loader for Node.js applications, written in TypeScript.",
   "license": "Apache-2.0",
